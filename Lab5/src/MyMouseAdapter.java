@@ -65,21 +65,27 @@ public class MyMouseAdapter extends MouseAdapter {
 		
 		switch (e.getButton()) {
 		case 1:		//Left mouse button
-			if ((myPanel.mouseDownGridX > 0) && (myPanel.mouseDownGridY > 0)) {
-				if ((gridX > 0) && (gridY > 0)) {
+			if ((myPanel.mouseDownGridX >= 0) && (myPanel.mouseDownGridY >= 0)) {
+				if ((gridX >= 0) && (gridY >= 0)) {
 					myPanel.checkCellInfo(myPanel.mouseDownGridX, myPanel.mouseDownGridY);
 					if(myPanel.cellBombInfo[myPanel.mouseDownGridX][myPanel.mouseDownGridY] == -1){
-						myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] =Color.BLACK;
-						myPanel.repaint();
+						
 					}
 				}
 			}
 			break;
 		case 3:		//Right mouse button
-			if ((myPanel.mouseDownGridX > 0) && (myPanel.mouseDownGridY > 0)) {
-				if ((gridX > 0) && (gridY > 0)) {
-
-					myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] =Color.RED;
+			if ((myPanel.mouseDownGridX >= 0) && (myPanel.mouseDownGridY >= 0)) {
+				if ((gridX >= 0) && (gridY >= 0)) {
+					if(!myPanel.cellIsChecked[myPanel.mouseDownGridX][myPanel.mouseDownGridY]){
+						myPanel.cellIsChecked[myPanel.mouseDownGridX][myPanel.mouseDownGridY] = !myPanel.cellIsChecked[myPanel.mouseDownGridX][myPanel.mouseDownGridY];
+						myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] =Color.RED;
+					}
+					else if(myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] ==Color.RED){
+						myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] =Color.WHITE;
+						myPanel.cellIsChecked[myPanel.mouseDownGridX][myPanel.mouseDownGridY] = !myPanel.cellIsChecked[myPanel.mouseDownGridX][myPanel.mouseDownGridY];
+					}
+					
 					myPanel.repaint();
 				}
 			}
