@@ -1,4 +1,6 @@
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Insets;
 import java.util.Random;
@@ -11,7 +13,7 @@ public class MyPanel extends JPanel {
 	private static final int GRID_Y = 25;
 	private static final int INNER_CELL_SIZE = 29;
 	private static final int TOTAL_COLUMNS = 10;
-	private static final int TOTAL_ROWS = 11;   //Last row has only one cell
+	private static final int TOTAL_ROWS = 10;   //Last row has only one cell
 	public int x = -1;
 	public int y = -1;
 	public int mouseDownGridX = 0;
@@ -50,59 +52,57 @@ public class MyPanel extends JPanel {
 		cellBombInfo[3][8] = -1;
 		cellBombInfo[6][6] = -1;
 		cellBombInfo[8][8] = -1;
+		bombIndicator();
 		
 	}
 	
-	public boolean IsOutOfBound(int x, int y){
-		
-		
-		
-		return ((x>TOTAL_COLUMNS || x<1) || (y>TOTAL_ROWS || y<1));
-		
+	public boolean isOutOfBound(int x, int y){
+		return ((x>TOTAL_COLUMNS-1 || x<1) || (y>TOTAL_ROWS-2 || y<1));
 	}
 	
-	private void BombIndicator(){
+	private void bombIndicator(){
 		for(int i=1;i<TOTAL_COLUMNS;i++){
 			for(int j=1; j<=(TOTAL_ROWS)-1;j++){
 				if(cellBombInfo[i][j] != -1){
 					cellBombInfo[i][j] = 0;
-					if(cellBombInfo[i-1][j-1] == -1){ cellBombInfo[i][j]++;}
-					if(cellBombInfo[i][j-1] == -1){cellBombInfo[i][j]++;}
-					if(cellBombInfo[i+1][j-1] == -1){cellBombInfo[i][j]++;}
-					if(cellBombInfo[i-1][j] == -1){cellBombInfo[i][j]++;}
-					if(cellBombInfo[i+1][j] == -1){cellBombInfo[i][j]++;}
-					if(cellBombInfo[i-1][j+1] == -1){cellBombInfo[i][j]++;}
-					if(cellBombInfo[i][j+1] == -1){cellBombInfo[i][j]++;}
-					if(cellBombInfo[i+1][j+1] == -1){cellBombInfo[i][j]++;}
+					if(!isOutOfBound(i-1, j-1) && 	cellBombInfo[i-1][j-1] == -1){ cellBombInfo[i][j]++;}
+					if(!isOutOfBound(i, j-1) && 	cellBombInfo[i][j-1] == -1){cellBombInfo[i][j]++;}
+					if(!isOutOfBound(i+2, j-1) && 	cellBombInfo[i+1][j-1] == -1){cellBombInfo[i][j]++;}
+					if(!isOutOfBound(i-1, j) && 	cellBombInfo[i-1][j] == -1){cellBombInfo[i][j]++;}
+					if(!isOutOfBound(i+1, j) && 	cellBombInfo[i+1][j] == -1){cellBombInfo[i][j]++;}
+					if(!isOutOfBound(i-1, j+1) && 	cellBombInfo[i-1][j+1] == -1){cellBombInfo[i][j]++;}
+					if(!isOutOfBound(i, j+1) && 	cellBombInfo[i][j+1] == -1){cellBombInfo[i][j]++;}
+					if(!isOutOfBound(i+1, j+1) && 	cellBombInfo[i+1][j+1] == -1){cellBombInfo[i][j]++;}
 				}
 			}
 		}
 	}
-	
+
 	public void checkCellInfo(int x, int y){
-		if(!cellIsChecked[x][y]){
-		if(cellBombInfo[x][y] == -1){
-			
-		}
-		else if(cellBombInfo[x][y] >0){
-			//TO DO: draw number//
+		if(!isOutOfBound(x, y) && !cellIsChecked[x][y]){
 			cellIsChecked[x][y] = true;
+			if(cellBombInfo[x][y] == -1){
+				System.out.println("BOMB");
+			}
+			else if(cellBombInfo[x][y] >0){
+				//TO DO: draw number//
+				colorArray[x][y] =Color.BLUE;
+				System.out.println(cellBombInfo[x][y]);
+				repaint();
+			}
+			else if(cellBombInfo[x][y] ==0){
+				checkCellInfo(x-1,y-1);
+				checkCellInfo(x,y-1);
+				checkCellInfo(x+1,y-1);
+				checkCellInfo(x-1,y);
+				checkCellInfo(x+1,y);
+				checkCellInfo(x-1,y+1);
+				checkCellInfo(x,y+1);
+				checkCellInfo(x+1,y+1);
+			}
 		}
-		else if(cellBombInfo[x][y] ==0){
-			checkCellInfo(x-1,y-1);
-			checkCellInfo(x,y-1);
-			checkCellInfo(x+1,y-1);
-			checkCellInfo(x-1,y);
-			checkCellInfo(x+1,y);
-			checkCellInfo(x-1,y+1);
-			checkCellInfo(x,y+1);
-			checkCellInfo(x+1,y+1);
-		}
-		}
-			
-			
-		
 	}
+	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
@@ -143,6 +143,12 @@ public class MyPanel extends JPanel {
 			}
 		}
 	}
+	
+	@Override
+	public Dimension getPreferredSize() {
+		return new Dimension((INNER_CELL_SIZE+1)*TOTAL_COLUMNS + GRID_X*2, (INNER_CELL_SIZE+1)*TOTAL_ROWS + GRID_Y*2);
+	}
+	
 	public int getGridX(int x, int y) {
 		Insets myInsets = getInsets();
 		int x1 = myInsets.left;
