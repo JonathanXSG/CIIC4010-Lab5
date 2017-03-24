@@ -17,6 +17,8 @@ public class MyPanel extends JPanel {
 	public int mouseDownGridX = 0;
 	public int mouseDownGridY = 0;
 	public Color[][] colorArray = new Color[TOTAL_COLUMNS][TOTAL_ROWS];
+	public int[][] cellBombInfo = new int [TOTAL_COLUMNS][TOTAL_ROWS];
+	public boolean [][]cellIsChecked = new boolean[TOTAL_COLUMNS][TOTAL_ROWS];
 	public MyPanel() {   //This is the constructor... this code runs first to initialize
 		if (INNER_CELL_SIZE + (new Random()).nextInt(1) < 1) {	//Use of "random" to prevent unwanted Eclipse warning
 			throw new RuntimeException("INNER_CELL_SIZE must be positive!");
@@ -38,6 +40,68 @@ public class MyPanel extends JPanel {
 				colorArray[x][y] = Color.WHITE;
 			}
 		}
+		cellBombInfo[2][2] = -1;
+		cellBombInfo[7][3] = -1;
+		cellBombInfo[2][4] = -1;
+		cellBombInfo[3][5] = -1;
+		cellBombInfo[1][6] = -1;
+		cellBombInfo[1][9] = -1;
+		cellBombInfo[2][8] = -1;
+		cellBombInfo[3][8] = -1;
+		cellBombInfo[6][6] = -1;
+		cellBombInfo[8][8] = -1;
+		
+	}
+	
+	public boolean IsOutOfBound(int x, int y){
+		
+		
+		
+		return ((x>TOTAL_COLUMNS || x<1) || (y>TOTAL_ROWS || y<1));
+		
+	}
+	
+	private void BombIndicator(){
+		for(int i=1;i<TOTAL_COLUMNS;i++){
+			for(int j=1; j<=(TOTAL_ROWS)-1;j++){
+				if(cellBombInfo[i][j] != -1){
+					cellBombInfo[i][j] = 0;
+					if(cellBombInfo[i-1][j-1] == -1){ cellBombInfo[i][j]++;}
+					if(cellBombInfo[i][j-1] == -1){cellBombInfo[i][j]++;}
+					if(cellBombInfo[i+1][j-1] == -1){cellBombInfo[i][j]++;}
+					if(cellBombInfo[i-1][j] == -1){cellBombInfo[i][j]++;}
+					if(cellBombInfo[i+1][j] == -1){cellBombInfo[i][j]++;}
+					if(cellBombInfo[i-1][j+1] == -1){cellBombInfo[i][j]++;}
+					if(cellBombInfo[i][j+1] == -1){cellBombInfo[i][j]++;}
+					if(cellBombInfo[i+1][j+1] == -1){cellBombInfo[i][j]++;}
+				}
+			}
+		}
+	}
+	
+	public void checkCellInfo(int x, int y){
+		if(!cellIsChecked[x][y]){
+		if(cellBombInfo[x][y] == -1){
+			
+		}
+		else if(cellBombInfo[x][y] >0){
+			//TO DO: draw number//
+			cellIsChecked[x][y] = true;
+		}
+		else if(cellBombInfo[x][y] ==0){
+			checkCellInfo(x-1,y-1);
+			checkCellInfo(x,y-1);
+			checkCellInfo(x+1,y-1);
+			checkCellInfo(x-1,y);
+			checkCellInfo(x+1,y);
+			checkCellInfo(x-1,y+1);
+			checkCellInfo(x,y+1);
+			checkCellInfo(x+1,y+1);
+		}
+		}
+			
+			
+		
 	}
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
