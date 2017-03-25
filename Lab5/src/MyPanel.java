@@ -15,6 +15,8 @@ public class MyPanel extends JPanel {
 	private static final int TOTAL_COLUMNS = 10;
 	private static final int TOTAL_ROWS = 10;   //Last row has only one cell
 	
+	Random random = new Random();
+	
 	public int x = -1;
 	public int y = -1;
 	public int mouseDownGridX = 0;
@@ -41,16 +43,17 @@ public class MyPanel extends JPanel {
 				colorArray[x][y] = Color.WHITE;
 			}
 		}
-		cellBombInfo[1][1] = -1;
-		cellBombInfo[8][2] = -1;
-		cellBombInfo[2][4] = -1;
-		cellBombInfo[5][2] = -1;
-		cellBombInfo[1][6] = -1;
-		cellBombInfo[1][9] = -1;
-		cellBombInfo[2][8] = -1;
-		cellBombInfo[3][8] = -1;
-		cellBombInfo[7][5] = -1;
-		cellBombInfo[8][8] = -1;
+		cellBombInfo[random.nextInt(TOTAL_COLUMNS)][random.nextInt(TOTAL_ROWS)] = -1;
+		cellBombInfo[random.nextInt(TOTAL_COLUMNS)][random.nextInt(TOTAL_ROWS)] = -1;
+		cellBombInfo[random.nextInt(TOTAL_COLUMNS)][random.nextInt(TOTAL_ROWS)] = -1;
+		cellBombInfo[random.nextInt(TOTAL_COLUMNS)][random.nextInt(TOTAL_ROWS)] = -1;
+		cellBombInfo[random.nextInt(TOTAL_COLUMNS)][random.nextInt(TOTAL_ROWS)] = -1;
+		cellBombInfo[random.nextInt(TOTAL_COLUMNS)][random.nextInt(TOTAL_ROWS)] = -1;
+		cellBombInfo[random.nextInt(TOTAL_COLUMNS)][random.nextInt(TOTAL_ROWS)] = -1;
+		cellBombInfo[random.nextInt(TOTAL_COLUMNS)][random.nextInt(TOTAL_ROWS)] = -1;
+		cellBombInfo[random.nextInt(TOTAL_COLUMNS)][random.nextInt(TOTAL_ROWS)] = -1;
+		cellBombInfo[random.nextInt(TOTAL_COLUMNS)][random.nextInt(TOTAL_ROWS)] = -1;
+		
 		bombIndicator();
 		
 	}
@@ -83,16 +86,18 @@ public class MyPanel extends JPanel {
 			if(cellBombInfo[x][y] == -1){
 				System.out.println("BOMB");
 				colorArray[mouseDownGridX][mouseDownGridY] =Color.RED;
+				
 				repaint();
 			}
 			else if(cellBombInfo[x][y] >0){
 				//TO DO: draw number//
-				colorArray[x][y] =Color.LIGHT_GRAY;
+				colorArray[x][y] =new Color(0xe0e0e0);
 				numbers[x][y] = new Numbers(String.valueOf(cellBombInfo[x][y]),GRID_X+(INNER_CELL_SIZE+1)*x+10,GRID_Y+(INNER_CELL_SIZE+1)*y+22);
 				System.out.println(cellBombInfo[x][y]);
 				repaint();
 			}
 			else if(cellBombInfo[x][y] ==0){
+				colorArray[x][y] = new Color(0xe0e0e0);
 				checkCellInfo(x-1,y-1);
 				checkCellInfo(x,y-1);
 				checkCellInfo(x+1,y-1);
@@ -207,4 +212,5 @@ public class MyPanel extends JPanel {
 		}
 		return y;
 	}
+
 }
