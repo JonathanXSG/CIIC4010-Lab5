@@ -22,6 +22,7 @@ public class MyPanel extends JPanel {
 	public Color[][] colorArray = new Color[TOTAL_COLUMNS][TOTAL_ROWS];
 	public int[][] cellBombInfo = new int [TOTAL_COLUMNS][TOTAL_ROWS];
 	public boolean [][]cellIsChecked = new boolean[TOTAL_COLUMNS][TOTAL_ROWS];
+	public Numbers[][] numbers = new Numbers[TOTAL_COLUMNS][TOTAL_ROWS];
 	
 	
 	public MyPanel() {   //This is the constructor... this code runs first to initialize
@@ -81,12 +82,13 @@ public class MyPanel extends JPanel {
 			cellIsChecked[x][y] = true;
 			if(cellBombInfo[x][y] == -1){
 				System.out.println("BOMB");
-				colorArray[mouseDownGridX][mouseDownGridY] =Color.BLACK;
+				colorArray[mouseDownGridX][mouseDownGridY] =Color.RED;
 				repaint();
 			}
 			else if(cellBombInfo[x][y] >0){
 				//TO DO: draw number//
-				colorArray[x][y] =Color.BLUE;
+				colorArray[x][y] =Color.LIGHT_GRAY;
+				numbers[x][y] = new Numbers(String.valueOf(cellBombInfo[x][y]),GRID_X+(INNER_CELL_SIZE+1)*x+10,GRID_Y+(INNER_CELL_SIZE+1)*y+22);
 				System.out.println(cellBombInfo[x][y]);
 				repaint();
 			}
@@ -136,7 +138,16 @@ public class MyPanel extends JPanel {
 					Color c = colorArray[x][y];
 					g.setColor(c);
 					g.fillRect(x1 + GRID_X + (x * (INNER_CELL_SIZE + 1)) + 1, y1 + GRID_Y + (y * (INNER_CELL_SIZE + 1)) + 1, INNER_CELL_SIZE, INNER_CELL_SIZE);
+					
+			}
+		}
+		for (int x = 0; x < TOTAL_COLUMNS; x++) {
+			for (int y = 0; y < TOTAL_ROWS; y++) {
 				
+					if(numbers[x][y] != null){
+						numbers[x][y].draw(g);
+					}
+					
 			}
 		}
 	}
