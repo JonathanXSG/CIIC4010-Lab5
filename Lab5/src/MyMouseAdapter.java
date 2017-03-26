@@ -1,17 +1,17 @@
-import java.awt.Color;
+
 import java.awt.Component;
 import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Random;
-
 import javax.swing.JFrame;
 
 public class MyMouseAdapter extends MouseAdapter {
-	private Random generator = new Random();
 	public int [] colors = new int[10];
 	public int numOfColors = 0;
 	public int newNumber;
+	
+	
+	
 	public void mousePressed(MouseEvent e) {
 		Component c = e.getComponent();
 		while (!(c instanceof JFrame)) {
@@ -66,26 +66,15 @@ public class MyMouseAdapter extends MouseAdapter {
 		switch (e.getButton()) {
 		case 1:		//Left mouse button
 			if ((myPanel.mouseDownGridX >= 0) && (myPanel.mouseDownGridY >= 0)) {
-				if ((gridX >= 0) && (gridY >= 0)) {
+				if ((gridX == myPanel.mouseDownGridX) && (gridY == myPanel.mouseDownGridY)) {
 					myPanel.checkCellInfo(myPanel.mouseDownGridX, myPanel.mouseDownGridY);
-					if(myPanel.cellBombInfo[myPanel.mouseDownGridX][myPanel.mouseDownGridY] == -1){
-						
-					}
 				}
 			}
 			break;
 		case 3:		//Right mouse button
 			if ((myPanel.mouseDownGridX >= 0) && (myPanel.mouseDownGridY >= 0)) {
-				if ((gridX >= 0) && (gridY >= 0)) {
-					if(!myPanel.cellIsChecked[myPanel.mouseDownGridX][myPanel.mouseDownGridY]){
-						myPanel.cellIsChecked[myPanel.mouseDownGridX][myPanel.mouseDownGridY] = !myPanel.cellIsChecked[myPanel.mouseDownGridX][myPanel.mouseDownGridY];
-						myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] =Color.RED;
-					}
-					else if(myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] ==Color.RED){
-						myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] =Color.WHITE;
-						myPanel.cellIsChecked[myPanel.mouseDownGridX][myPanel.mouseDownGridY] = !myPanel.cellIsChecked[myPanel.mouseDownGridX][myPanel.mouseDownGridY];
-					}
-					
+				if ((gridX == myPanel.mouseDownGridX) && (gridY == myPanel.mouseDownGridY)) {
+					myPanel.setFlag(myPanel.mouseDownGridX, myPanel.mouseDownGridY);
 					myPanel.repaint();
 				}
 			}
