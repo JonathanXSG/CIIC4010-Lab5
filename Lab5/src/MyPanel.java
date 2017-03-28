@@ -51,7 +51,7 @@ public class MyPanel extends JPanel {
 				cellArray[x][y] = new Cell(x, y);
 			}
 		}
-		setRandomBombs(10);
+		setRandomBombs((TOTAL_COLUMNS+TOTAL_ROWS)*2/3 + random.nextInt((TOTAL_COLUMNS+TOTAL_ROWS)/2));
 		bombIndicator();
 	}
 	
@@ -59,8 +59,8 @@ public class MyPanel extends JPanel {
 		int x;
 		int y;
 		for(int i =0; i<numOfBombs;i++){
-			x= new Random().nextInt(10);
-			y= new Random().nextInt(10);
+			x= new Random().nextInt(TOTAL_COLUMNS);
+			y= new Random().nextInt(TOTAL_ROWS);
 			if(cellArray[x][y].isBomb()){
 				i--;
 			}
@@ -131,6 +131,7 @@ public class MyPanel extends JPanel {
 			else{
 				createCellArray();
 			}	
+			repaint();
 		}
 	}
 	
