@@ -75,7 +75,6 @@ public class MyMouseAdapter extends MouseAdapter {
 			if ((myPanel.mouseDownGridX >= 0) && (myPanel.mouseDownGridY >= 0)) {
 				if ((gridX == myPanel.mouseDownGridX) && (gridY == myPanel.mouseDownGridY)) {
 					myPanel.setFlag(myPanel.mouseDownGridX, myPanel.mouseDownGridY);
-					myPanel.repaint();
 				}
 			}
 			break;

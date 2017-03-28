@@ -22,8 +22,6 @@ public class MyPanel extends JPanel {
 	public int y = -1;
 	public int mouseDownGridX = 0;
 	public int mouseDownGridY = 0;
-	public Color[][] colorArray = new Color[TOTAL_COLUMNS][TOTAL_ROWS];
-	public boolean [][]cellIsChecked = new boolean[TOTAL_COLUMNS][TOTAL_ROWS];
 	public Cell[][] cellArray = new Cell[TOTAL_COLUMNS][TOTAL_ROWS];
 	
 	
@@ -38,11 +36,6 @@ public class MyPanel extends JPanel {
 			throw new RuntimeException("TOTAL_ROWS must be at least 3!");
 		}
 		
-		for (int x = 0; x < TOTAL_COLUMNS; x++) {   //The rest of the grid
-			for (int y = 0; y < TOTAL_ROWS; y++) {
-				colorArray[x][y] = Color.WHITE;
-			}
-		}
 	}
 	
 	public void createCellArray(){
@@ -123,31 +116,15 @@ public class MyPanel extends JPanel {
 			}
 		}
 		repaint();
-		if(hasPlayerWon()){
-			int optionPaneAnswer = JOptionPane.showConfirmDialog(getParent(), "You have Won!!! \n Do you want to restart?", "END GAME",JOptionPane.YES_NO_OPTION,JOptionPane.WARNING_MESSAGE);
-			if(optionPaneAnswer==1){
-				Main.getJFrame().dispatchEvent(new WindowEvent(Main.getJFrame(), WindowEvent.WINDOW_CLOSING));
-			}
-			else{
-				createCellArray();
-			}	
-			repaint();
-		}
+		hasPlayerWon();
 	}
 	
 	public void setFlag(int x, int y){
 		if(!isOutOfBound(x, y) && !cellArray[x][y].isChecked()){
 			cellArray[x][y].setHasFlag(!cellArray[x][y].hasFlag());
+			repaint();
 		}
-		if(hasPlayerWon()){
-			int optionPaneAnswer = JOptionPane.showConfirmDialog(getParent(), "You have Won!. \n Do you want to restart?", "END GAME",JOptionPane.YES_NO_OPTION,JOptionPane.WARNING_MESSAGE);
-			if(optionPaneAnswer==1){
-				Main.getJFrame().dispatchEvent(new WindowEvent(Main.getJFrame(), WindowEvent.WINDOW_CLOSING));
-			}
-			else{
-				createCellArray();
-			}	
-		}
+		hasPlayerWon();
 	}
 	
 	public void showAllBombs(){
@@ -161,18 +138,25 @@ public class MyPanel extends JPanel {
 		}
 	}
 	
-	public boolean hasPlayerWon(){
+	public void hasPlayerWon(){
+		boolean playerWon =true;
 		for (int x = 0; x < TOTAL_COLUMNS; x++) {   
 			for (int y = 0; y < TOTAL_ROWS; y++) {
-				if(!cellArray[x][y].isBomb() && !cellArray[x][y].isChecked()){
-					return false;
-				}
-				else if(cellArray[x][y].isBomb() && !cellArray[x][y].hasFlag()){
-					return false;
+				if((!cellArray[x][y].isBomb() && !cellArray[x][y].isChecked()) || (cellArray[x][y].isBomb() && !cellArray[x][y].hasFlag())){
+					playerWon =false;
 				}
 			}
 		}
-		return true;
+		if(playerWon){
+			int optionPaneAnswer = JOptionPane.showConfirmDialog(getParent(), "You have Won!. \n Do you want to restart?", "END GAME",JOptionPane.YES_NO_OPTION,JOptionPane.WARNING_MESSAGE);
+			if(optionPaneAnswer==1){
+				Main.getJFrame().dispatchEvent(new WindowEvent(Main.getJFrame(), WindowEvent.WINDOW_CLOSING));
+			}
+			else{
+				createCellArray();
+			}	
+		}
+		repaint();
 	}
 	
 	@Override
@@ -202,17 +186,11 @@ public class MyPanel extends JPanel {
 			g.drawLine(x1 + GRID_X + (x * (INNER_CELL_SIZE + 1)), y1 + GRID_Y, x1 + GRID_X + (x * (INNER_CELL_SIZE + 1)), y1 + GRID_Y + ((INNER_CELL_SIZE + 1) * (TOTAL_ROWS)));
 		}
 		
-		//Paint cell colors
+		//Paint cells
 		for (int x = 0; x < TOTAL_COLUMNS; x++) {
 			for (int y = 0; y < TOTAL_ROWS; y++) {
-					Color c = colorArray[x][y];
-					g.setColor(c);
+					g.setColor(Color.WHITE);
 					g.fillRect(x1 + GRID_X + (x * (INNER_CELL_SIZE + 1)) + 1, y1 + GRID_Y + (y * (INNER_CELL_SIZE + 1)) + 1, INNER_CELL_SIZE, INNER_CELL_SIZE);
-			}
-		}
-		//Paint all Cells
-		for (int x = 0; x < TOTAL_COLUMNS; x++) {
-			for (int y = 0; y < TOTAL_ROWS; y++) {
 					cellArray[x][y].draw(g);
 			}
 		}

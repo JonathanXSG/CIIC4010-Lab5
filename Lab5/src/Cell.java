@@ -47,15 +47,15 @@ public class Cell {
 			if(this.adjacentBombs>0){
 				t.setColor(new Color(0xe0e0e0));
 				g.fillRect(x+1 , y+1, 29, 29);
-				switch (String.valueOf(this.adjacentBombs)) {
-				case "1":t.setColor(new Color(0x428cf4));break;
-				case "2":t.setColor(new Color(0x7a42f4));break;
-				case "3":t.setColor(new Color(0xf442e8));break;
-				case "4":t.setColor(Color.RED);break;
-				case "5":t.setColor(Color.ORANGE);break;
-				case "6":t.setColor(Color.YELLOW);break;
-				case "7":t.setColor(new Color(0x4bdb0d));break;
-				case "8":t.setColor(Color.BLACK);break;
+				switch (this.adjacentBombs) {
+				case 1:t.setColor(new Color(0x428cf4));break;
+				case 2:t.setColor(new Color(0x7a42f4));break;
+				case 3:t.setColor(new Color(0xf442e8));break;
+				case 4:t.setColor(Color.RED);break;
+				case 5:t.setColor(Color.ORANGE);break;
+				case 6:t.setColor(Color.YELLOW);break;
+				case 7:t.setColor(new Color(0x4bdb0d));break;
+				case 8:t.setColor(Color.BLACK);break;
 				}		
 				t.setFont(f);
 				t.drawString(String.valueOf(this.adjacentBombs), x+10, y+22);
